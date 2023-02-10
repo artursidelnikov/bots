@@ -11,7 +11,7 @@ import keyboard
 from audioplayer import AudioPlayer
 
 # Переменные
-
+a = 10
 filename = 'Image.png'  # Картинка для скринов
 
 global kapcha, kapcha_x, kapcha_y, X0_inventar, Y0_inventar, X1_inventar, Y1_inventar, krasn_x, krasn_y, krasn, l_param, krasn_net, krasn_net_x, krasn_net_y, X0_rib, Y0_rib, X1_rib, Y1_rib
