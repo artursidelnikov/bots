@@ -9,10 +9,8 @@ import pytesseract
 import time
 import keyboard
 from audioplayer import AudioPlayer
-a = 20
-# Переменные
-a = 10
 
+# Переменные
 filename = 'Image.png'  # Картинка для скринов
 
 global kapcha, kapcha_x, kapcha_y, X0_inventar, Y0_inventar, X1_inventar, Y1_inventar, krasn_x, krasn_y, krasn, l_param, krasn_net, krasn_net_x, krasn_net_y, X0_rib, Y0_rib, X1_rib, Y1_rib
@@ -62,8 +60,6 @@ l_param = win32api.MAKELONG(1777, 309)  # ??????????????????????????????????????
 statistika = open('many.txt', 'r')
 vse_ribi = statistika.readlines()
 statistika.close()
-
-# +++++++++++++++++++++++++Возможно нужен поток(покачто делаем один раз+++++++++++++++ragemp_v.exe
 
 # Ищем номер окна по его процессу
 notepads = [item for item in psutil.process_iter() if item.name() == 'GTA5.exe']
@@ -121,7 +117,7 @@ def stop():
     status = False
 
 
-# Находим цвет пикселя (ПОКА ЧТО НЕ РАБОТАЕТ, ХОТЯ РАНЬШЕ РАБОТАЛОООООООО СУК)
+# Находим цвет пикселя
 def set_hex(color):
     r = color & 0xFF
     g = color >> 8 & 0xFF
@@ -136,7 +132,9 @@ def kapcha_opoveshenie():
     # Получаем пиксель с экрана
     win32api.SendMessage(hwnd, win32con.WM_SETFOCUS, 0)
     time.sleep(0.2)
-    color = win32gui.GetPixel(win32gui.GetWindowDC(hwnd), kapcha_x, kapcha_y)
+    dc = win32gui.GetWindowDC(hwnd)
+    color = win32gui.GetPixel(dc, kapcha_x, kapcha_y)
+    win32gui.ReleaseDC(hwnd, dc)
     win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
     zvet = set_hex(color)
     if (kapcha[0] == zvet[0] and kapcha[1] == zvet[1] and kapcha[2] == zvet[2]):
@@ -151,7 +149,9 @@ def kapcha_naydena():
     # Получаем пиксель с экрана
     while True:
         win32api.SendMessage(hwnd, win32con.WM_SETFOCUS, 0)
-        color = win32gui.GetPixel(win32gui.GetWindowDC(hwnd), kapcha_x, kapcha_y)
+        dc = win32gui.GetWindowDC(hwnd)
+        color = win32gui.GetPixel(dc, kapcha_x, kapcha_y)
+        win32gui.ReleaseDC(hwnd, dc)
         time.sleep(1)
         win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
         zvet = set_hex(color)
@@ -180,7 +180,7 @@ def cod():
         time.sleep(1)
         background_screenshot(hwnd, X0_inventar, Y0_inventar, X1_inventar - X0_inventar, Y1_inventar - Y0_inventar)
         img = cv2.imread('Image.png')
-        pytesseract.pytesseract.tesseract_cmd = r"A:\proba\teseract\tesseract.exe"
+        pytesseract.pytesseract.tesseract_cmd = r"A:\cod\gtaРЫБАЛКА\teseract\tesseract.exe"
         Ves_inventar = pytesseract.image_to_string(img, config='--psm 11')
         print(Ves_inventar)
         Ves_inventar = Ves_inventar[:4]
@@ -225,7 +225,9 @@ def cod():
             while nekras:
                 win32api.SendMessage(hwnd, win32con.WM_SETFOCUS, 0)
                 time.sleep(0.2)
-                color = win32gui.GetPixel(win32gui.GetWindowDC(hwnd), krasn_x, krasn_y)
+                dc = win32gui.GetWindowDC(hwnd)
+                color = win32gui.GetPixel(dc, krasn_x, krasn_y)
+                win32gui.ReleaseDC(hwnd, dc)
                 win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
                 zvet = set_hex(color)
                 # win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
@@ -236,11 +238,13 @@ def cod():
             # Первый раз стала красной1111111111111111111111111111111111111111111111111111111
             while kras:
                 win32api.SendMessage(hwnd, win32con.WM_SETFOCUS, 0)
-                color = win32gui.GetPixel(win32gui.GetWindowDC(hwnd), krasn_x, krasn_y)
+                dc = win32gui.GetWindowDC(hwnd)
+                color = win32gui.GetPixel(dc, krasn_x, krasn_y)
                 win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
                 zvet = set_hex(color)
                 win32api.SendMessage(hwnd, win32con.WM_SETFOCUS, 0)
-                color = win32gui.GetPixel(win32gui.GetWindowDC(hwnd), krasn_net_x, krasn_net_y)
+                color = win32gui.GetPixel(dc, krasn_net_x, krasn_net_y)
+                win32gui.ReleaseDC(hwnd, dc)
                 win32api.SendMessage(hwnd, win32con.WM_KILLFOCUS, 0)
                 zvet_k = set_hex(color)
                 if (krasn[0] == zvet[0] and krasn[1] == zvet[1] and krasn[2] == zvet[2]):
@@ -258,7 +262,7 @@ def cod():
             while True:
                 background_screenshot(hwnd, X0_rib, Y0_rib, X1_rib - X0_rib, Y1_rib - Y0_rib)
                 img = cv2.imread('Image.png')
-                pytesseract.pytesseract.tesseract_cmd = r"A:\proba\teseract\tesseract.exe"
+                pytesseract.pytesseract.tesseract_cmd = r"A:\cod\gtaРЫБАЛКА\teseract\tesseract.exe"
                 riba = pytesseract.image_to_string(img, lang="rus", config='--psm 11')
                 if riba != "":
                     if riba[0] == "В" and riba[1] == "ы" and riba[2] == " " and riba[3] == "п":
